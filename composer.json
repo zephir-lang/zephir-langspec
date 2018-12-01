@@ -6,7 +6,7 @@
     "language-specification"
   ],
   "homepage": "https://zephir-lang.com",
-  "license": "CC0 1.0 Universal",
+  "license": "MIT AND CC0-1.0",
   "authors": [
     {
       "name": "Zephir Team",
