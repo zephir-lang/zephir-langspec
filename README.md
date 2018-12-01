@@ -2,12 +2,6 @@
     <img src="https://zephir-lang.com/images/logo-105x36.svg" height="100" alt="Zephir"/>
 </a></p>
 
-<p align="center">
-    <a href="https://packagist.org/packages/phalcon/zephir">
-        <img src="https://poser.pugx.org/phalcon/zephir/license.svg" alt="License">
-    </a>
-</p>
-
 This repo contains the WIP [Zephir Language][0] Specifications.
 
 ## License
