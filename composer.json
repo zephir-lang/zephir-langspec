@@ -1,0 +1,49 @@
+{
+  "name": "zephir/langspec",
+  "description": "Zephir Language Specifications",
+  "keywords": [
+    "zephir",
+    "language-specification"
+  ],
+  "homepage": "https://zephir-lang.com",
+  "license": "CC0 1.0 Universal",
+  "authors": [
+    {
+      "name": "Zephir Team",
+      "email": "team@zephir-lang.com",
+      "homepage": "https://zephir-lang.com"
+    },
+    {
+      "name": "Contributors",
+      "homepage": "https://github.com/zephir-lang/zephir-langspec/graphs/contributors"
+    }
+  ],
+  "require": {
+    "php": "^7.2"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "platform": {},
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Zephir\\": "src/Zephir/"
+    },
+    "files": [
+      "src/Zephir/Grammar/functions.php"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "bin": [
+    "grammar"
+  ],
+  "support": {
+    "issues": "https://github.com/zephir-lang/zephir-langspec/issues?state=open",
+    "forum": "https://forum.zephir-lang.com",
+    "source": "https://github.com/zephir-lang/zephir-langspec",
+    "docs": "https://docs.zephir-lang.com"
+  }
+}

@@ -1,0 +1,111 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use Zephir\Exceptions\DuplicateDefinitionException;
+use Zephir\Exceptions\NoSpecFileFoundException;
+use Zephir\Spec\Files;
+use function Zephir\Grammar\extract_grammar;
+use function Zephir\Grammar\extract_heading;
+use function Zephir\Grammar\get_all_defs;
+use function Zephir\Grammar\parse_grammar;
+use function Zephir\Grammar\render_grammar;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+error_reporting(-1);
+
+$specDir = __DIR__ . '/spec';
+
+try {
+    $files = new Files($specDir);
+
+    fprintf(STDOUT, 'Render grammars (after GRAMMAR blocks)...%s', PHP_EOL);
+
+    // Collect all defined names (for referencing)
+    $names = [];
+    foreach ($files() as $fileName => $path) {
+        $code = file_get_contents($path);
+        $definitions = get_all_defs($code);
+
+        foreach ($definitions as $definition) {
+            if (isset($names[$definition->getName()])) {
+                throw new DuplicateDefinitionException($definition->getName());
+            }
+
+            $names[$definition->getName()] = $fileName;
+        }
+    }
+
+    // Render grammars
+    foreach ($files() as $fileName => $path) {
+        $code = $origCode = file_get_contents($path);
+
+        $code = preg_replace_callback(
+            '/(<!--\s*GRAMMAR(.*?)-->)\s+<pre>.*?<\/pre>/s',
+            function ($matches) use ($names, $fileName) {
+                $defs = parse_grammar($matches[2]);
+                $rendered = render_grammar($defs, $names, $fileName);
+                return $matches[1] . "\n\n" . $rendered;
+            },
+            $code
+        );
+
+        if ($code !== $origCode) {
+            file_put_contents($path, $code);
+        }
+    }
+
+    fprintf(STDOUT, 'Generate summary grammar chapter...%s', PHP_EOL);
+
+    // Pretend that all definitions are inside 19-grammar.md now
+    $names = array_fill_keys(array_keys($names), '19-grammar.md');
+
+    $grammarFile = $specDir . '/19-grammar.md';
+
+    $output = <<<'END'
+# Grammar
+
+## General
+
+The grammar notation is described in [Grammars section](09-lexical-structure.md#grammars).
+
+## Lexical Grammar
+
+
+END;
+
+    if (file_exists($specDir . '/09-lexical-structure.md') == false) {
+        throw new NoSpecFileFoundException('09-lexical-structure.md');
+    }
+
+    $lexical = file_get_contents($specDir . '/09-lexical-structure.md');
+    $lexical = strstr($lexical, '## Lexical analysis');
+    $output .= extract_grammar($lexical, $names);
+
+    $output .= "\n\n## Syntactic Grammar";
+
+    $skipFiles = ['05-types.md', '09-lexical-structure.md', '19-grammar.md'];
+
+    foreach ($files($skipFiles) as $fileName => $path) {
+        $code = file_get_contents($path);
+        $grammar = extract_grammar($code, $names);
+
+        if ($grammar === null) {
+            continue;
+        }
+
+        $heading = extract_heading($code, $fileName);
+
+        $output .= "\n\n### $heading\n\n" . $grammar;
+    }
+
+    $output .= "\n";
+
+    file_put_contents($grammarFile, $output);
+
+    echo 'Done!', PHP_EOL;
+    exit(0);
+} catch (Throwable $e) {
+    fprintf(STDERR, "Error: %s%s", $e->getMessage(), PHP_EOL);
+    exit(1);
+}
