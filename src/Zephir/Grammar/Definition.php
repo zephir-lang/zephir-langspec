@@ -1,19 +1,36 @@
 <?php declare(strict_types=1);
 
+/*
+ * This file is part of the Zephir Language Specifications.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Zephir\Grammar;
 
 final class Definition implements Renderable
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $name;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $isLexical;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $isOneOf;
 
-    /** @var Rule[] */
+    /**
+     * @var Rule[]
+     */
     private $rules;
 
     /**
