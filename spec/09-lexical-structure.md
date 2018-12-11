@@ -8,14 +8,12 @@ functions residing in one or more files. A namespace is always required.
 
 Conceptually speaking, a program is translated using the following steps:
 
-1.  Transformation, which converts a program from a particular character
-    repertoire and encoding scheme into a sequence of 8-bit characters.
+1.  Transformation, which converts a program from a particular character repertoire and encoding scheme into a
+    sequence of 8-bit characters.
 
-2.  Lexical analysis, which translates a stream of input characters into
-    a stream of tokens.
+2.  Lexical analysis, which translates a stream of input characters into a stream of tokens.
 
-3.  Syntactic analysis, which translates the stream of tokens into
-    executable code.
+3.  Syntactic analysis, which translates the stream of tokens into executable code.
 
 
 Conforming implementations must accept scripts encoded with the UTF-8 encoding form (as defined by the
@@ -61,8 +59,8 @@ hexadecimal-digit-example:: one of
 
 ### General
 
-The production *input-file* is the root of the lexical structure for a
-program. Each *input-file* must conform to this production.
+The production *input-file* is the root of the lexical structure for a program. Each *input-file* must conform to
+this production.
 
 **Syntax**
 
@@ -127,15 +125,13 @@ characters `*/`. Except within a string literal or a comment, the characters `//
 may ends with a new line. That new line is not part of the comment. If the single-line comment is the last source
 element in a input file, the trailing new line can be omitted.
 
-A delimited comment can occur in any place in a script in which [white
-space](#white-space) can occur. (For example;
-`/*...*/$c/*...*/=/*...*/567/*...*/;/*...*/` is parsed as `$c=567;`, and
-`$k = $i+++/*...*/++$j;` is parsed as `$k = $i+++ ++$j;`).
+A delimited comment can occur in any place in a script in which [white space](#white-space) can occur. (For example;
+`/*...*/let c/*...*/=/*...*/567/*...*/;/*...*/` is parsed as `let c=567;`, and
+`let k = i+++/*...*/++j;` is parsed as `let k = i+++ ++j;`).
 
 **Implementation Notes**
 
-During tokenizing, an implementation can treat a delimited comment as
-though it was white space.
+During tokenizing, an implementation can treat a delimited comment as though it was white space.
 
 ### White Space
 

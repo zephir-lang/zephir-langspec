@@ -2,7 +2,7 @@
 
 ## Program Structure
 
-A Zephir program consists of one or more source files.
+A Zephir *program* consists of one or more source files.
 
 <!-- GRAMMAR
 program:
@@ -10,4 +10,6 @@ program:
 
 language:
   top-statement-list?
+
+top-statement-list:
 -->
