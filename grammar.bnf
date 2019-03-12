@@ -1,0 +1,117 @@
+# Zephir BNF grammar
+# v0.0.1
+
+<zephir> ::= <top_statement_list>
+
+<top_statement_list> ::= <xx_top_statement_list> <top_statement>
+<top_statement_list> ::= <top_statement>
+
+<top_statement> ::= <namespace_def>
+<top_statement> ::= <use_aliases>
+<top_statement> ::= <function_def>
+<top_statement> ::= <class_def>
+<top_statement> ::= <interface_def>
+<top_statement> ::= <comment>
+<top_statement> ::= <cblock>
+
+<namespace_def> ::= "namespace" <identifier> ";"
+<namespace_def> ::= <use_aliases_list> ";"
+
+<use_aliases_list> ::= <use_aliases_list> "," <use_aliases>
+<use_aliases_list> ::= <use_aliases>
+
+<use_aliases> ::= <identifier>
+<use_aliases> ::= <identifier> "as" <identifier>
+
+<function_def> ::= "function" <identifier> "(" ")" "->" <method_return_type> "{" "}"
+<function_def> ::= "function" <identifier> "(" ")" "->" <method_return_type> ";"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" "->" <method_return_type> "{" "}"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" "->" <method_return_type> ";"
+<function_def> ::= "function" <identifier> "(" ")" "->" <method_return_type> "{" <statement_list> "}"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" "->" <method_return_type> "{" <statement_list> "}"
+<function_def> ::= "function" <identifier> "(" ")" "{" "}"
+<function_def> ::= "function" <identifier> "(" ")" ";"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" "{" "}"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" ";"
+<function_def> ::= "function" <identifier> "(" ")" "{" <statement_list> "}"
+<function_def> ::= "function" <identifier> "(" <parameter_list> ")" "{" <statement_list> "}"
+
+<interface_def> ::= "interface" <identifier> <interface_body>
+<interface_def> ::= "interface" <identifier> "extends" <implements_list> <interface_body>
+
+<class_def> ::= "class" <identifier> <class_body>
+<class_def> ::= "class" <identifier> "extends" <identifier> <class_body>
+<class_def> ::= "class" <identifier> "implements" <implements_list> <class_body>
+<class_def> ::= "class" <identifier> "extends" <identifier> "implements" <implements_list> <class_body>
+<class_def> ::= "abstract" "class" <identifier> <class_body>
+<class_def> ::= "abstract" "class" <identifier> "extends" <identifier> <class_body>
+<class_def> ::= "abstract" "class" <identifier> "implements" <implements_list> <class_body>
+<class_def> ::= "abstract" "class" <identifier> "extends" <identifier> "implements" <implements_list> <class_body>
+<class_def> ::= "final" "class" <identifier> <class_body>
+<class_def> ::= "final" "class" <identifier> "extends" <identifier> <class_body>
+<class_def> ::= "final" "class" <identifier> "implements" <implements_list> <class_body>
+<class_def> ::= "final" "class" <identifier> "extends" <identifier> "implements" <implements_list> <class_body>
+
+<class_body> ::= "{" "}"
+<class_body> ::= "{" <class_definition> "}"
+
+<implements_list> ::= <implements_list> "," <implements>
+<implements_list> ::= <implements>
+
+<implements> ::= <identifier>
+
+<interface_body> ::= "{" "}"
+<interface_body> ::= "{" <interface_definition> "}"
+
+<class_definition> ::= <class_properties_definition>
+<class_definition> ::= <class_consts_definition>
+<class_definition> ::= <class_methods_definition>
+<class_definition> ::= <class_methods_definition>
+<class_definition> ::= <class_properties_definition> <class_consts_definition>
+<class_definition> ::= <class_consts_definition> <class_properties_definition>
+<class_definition> ::= <class_consts_definition> <class_methods_definition>
+<class_definition> ::= <class_properties_definition> <class_consts_definition> <class_methods_definition>
+<class_definition> ::= <class_consts_definition> <class_properties_definition> <class_methods_definition>
+
+<interface_definition> ::= <class_consts_definition>
+<interface_definition> ::= <interface_methods_definition>
+<interface_definition> ::= <class_consts_definition> <interface_methods_definition>
+
+<class_properties_definition> ::= <class_properties_definition> <class_property_definition>
+<class_properties_definition> ::= <class_property_definition>
+
+# TODO: <comment>
+<class_property_definition> ::= <comment> <visibility_list> <identifier> ";"
+<class_property_definition> ::= <visibility_list> <identifier> ";"
+<class_property_definition> ::= <comment> <visibility_list> <identifier> "=" <literal_expr> ";"
+<class_property_definition> ::= <visibility_list> <identifier> "=" <literal_expr> ";"
+<class_property_definition> ::= <comment> <visibility_list> <identifier> <class_property_shortcuts> ";"
+<class_property_definition> ::= <visibility_list> <identifier> <class_property_shortcuts> ";"
+<class_property_definition> ::= <comment> <visibility_list> <identifier> "=" <literal_expr> <class_property_shortcuts> ";"
+<class_property_definition> ::= <visibility_list> <identifier> "=" <literal_expr> <class_property_shortcuts> ";"
+
+<class_property_shortcuts> ::= "{" "}"
+<class_property_shortcuts> ::= "{" <class_property_shortcuts_list> "}"
+
+<class_property_shortcuts_list> ::= <class_property_shortcuts_list> "," <class_property_shortcut>
+<class_property_shortcuts_list> ::= <class_property_shortcut>
+
+<class_property_shortcut> ::= <identifier>
+<class_property_shortcut> ::= <comment> <identifier>
+
+<class_consts_definition> ::= <class_consts_definition> <class_const_definition>
+<class_consts_definition> ::= <class_const_definition>
+
+<class_methods_definition> ::= <class_methods_definition> <class_method_definition>
+<class_methods_definition> ::= <class_method_definition>
+
+<interface_methods_definition> ::= <interface_methods_definition> <interface_method_definition>
+<interface_methods_definition> ::= <interface_method_definition>
+
+<class_const_definition> ::= <comment> "const" <identifier> "=" <literal_expr> ";"
+<class_const_definition> ::= "const" <identifier> "=" <literal_expr> ";"
+
+<class_method_definition> ::= <visibility_list> "function" <identifier> "(" ")" "{" "}"
+<class_method_definition> ::= <visibility_list> "function" <identifier> "(" ")" ";"
+<class_method_definition> ::= <visibility_list> "function" <identifier> "(" <parameter_list> ")" "{" "}"
+<class_method_definition> ::= <visibility_list> "function" <identifier> "(" <parameter_list> ")" ";"
