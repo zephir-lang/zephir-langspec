@@ -1,0 +1,112 @@
+; zephir.bnf -- A complete grammar for Zephir prohramming language
+;
+; This file is part of the Zephir Language Specifications.
+;
+; (c) Zephir Team <team@zephir-lang.com>
+;
+; For the full copyright and license information, please view
+; the LICENSE file that was distributed with this source code.
+;
+; Author: Serghei Iakovlev <serghei@phalconphp.com>
+; Maintainer: Serghei Iakovlev
+; Version: 0.0.1
+; URL: https://github.com/zephir-lang/zephir-langspec/blob/master/zephir.bnf
+
+zephir ::= top-statement-list
+
+top-statement-list ::= top-statement-list top-statement
+top-statement-list ::= top-statement
+
+top-statement ::= namespace-def
+top-statement ::= use-aliases
+top-statement ::= function-def
+top-statement ::= class-def
+top-statement ::= interface-def
+top-statement ::= comment
+top-statement ::= cblock
+
+namespace-def ::= "namespace" identifier ";"
+namespace-def ::= use-aliases-list ";"
+
+use-aliases-list ::= use-aliases-list "," use-aliases
+use-aliases-list ::= use-aliases
+
+use-aliases ::= identifier
+use-aliases ::= identifier "as" identifier
+
+function-def ::= "function" identifier "(" ")" "-" method-return-type "{" "}"
+function-def ::= "function" identifier "(" ")" "-" method-return-type ";"
+function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type "{" "}"
+function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type ";"
+function-def ::= "function" identifier "(" ")" "-" method-return-type "{" statement-list "}"
+function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type "{" statement-list "}"
+function-def ::= "function" identifier "(" ")" "{" "}"
+function-def ::= "function" identifier "(" ")" ";"
+function-def ::= "function" identifier "(" parameter-list ")" "{" "}"
+function-def ::= "function" identifier "(" parameter-list ")" ";"
+function-def ::= "function" identifier "(" ")" "{" statement-list "}"
+function-def ::= "function" identifier "(" parameter-list ")" "{" statement-list "}"
+
+interface-def ::= "interface" identifier interface-body
+interface-def ::= "interface" identifier "extends" implements-list interface-body
+
+class-def ::= "class" identifier class-body
+class-def ::= "class" identifier "extends" identifier class-body
+class-def ::= "class" identifier "implements" implements-list class-body
+class-def ::= "class" identifier "extends" identifier "implements" implements-list class-body
+class-def ::= "abstract" "class" identifier class-body
+class-def ::= "abstract" "class" identifier "extends" identifier class-body
+class-def ::= "abstract" "class" identifier "implements" implements-list class-body
+class-def ::= "abstract" "class" identifier "extends" identifier "implements" implements-list class-body
+class-def ::= "final" "class" identifier class-body
+class-def ::= "final" "class" identifier "extends" identifier class-body
+class-def ::= "final" "class" identifier "implements" implements-list class-body
+class-def ::= "final" "class" identifier "extends" identifier "implements" implements-list class-body
+
+class-body ::= "{" "}"
+class-body ::= "{" class-definition "}"
+
+implements-list ::= implements-list "," implements
+implements-list ::= implements
+
+implements ::= identifier
+
+interface-body ::= "{" "}"
+interface-body ::= "{" interface-definition "}"
+
+class-definition ::= class-properties-definition
+class-definition ::= class-consts-definition
+class-definition ::= class-methods-definition
+class-definition ::= class-methods-definition
+class-definition ::= class-properties-definition class-consts-definition
+class-definition ::= class-consts-definition class-properties-definition
+class-definition ::= class-consts-definition class-methods-definition
+class-definition ::= class-properties-definition class-consts-definition class-methods-definition
+class-definition ::= class-consts-definition class-properties-definition class-methods-definition
+
+interface-definition ::= class-consts-definition
+interface-definition ::= interface-methods-definition
+interface-definition ::= class-consts-definition interface-methods-definition
+
+class-properties-definition ::= class-properties-definition class-property-definition
+class-properties-definition ::= class-property-definition
+
+class-property-definition ::= COMMENT(C) visibility-list identifier ";"
+class-property-definition ::= visibility-list identifier ";"
+class-property-definition ::= COMMENT(C) visibility-list identifier "=" literal-expr ";"
+class-property-definition ::= visibility-list identifier "=" literal-expr ";"
+class-property-definition ::= COMMENT(C) visibility-list identifier class-property-shortcuts ";"
+class-property-definition ::= visibility-list identifier class-property-shortcuts ";"
+class-property-definition ::= COMMENT(C) visibility-list identifier "=" literal-expr class-property-shortcuts ";"
+class-property-definition ::= visibility-list identifier "=" literal-expr class-property-shortcuts ";"
+
+class-property-shortcuts ::= "{" "}"
+class-property-shortcuts ::= "{" class-property-shortcuts-list "}"
+
+class-property-shortcuts-list ::= class-property-shortcuts-list "," class-property-shortcut
+class-property-shortcuts-list ::= class-property-shortcut
+
+class-property-shortcut ::= identifier
+class-property-shortcut ::= COMMENT(C) identifier
+
+; 409 constants definition
