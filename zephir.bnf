@@ -1,112 +1,96 @@
-; zephir.bnf -- A complete grammar for Zephir prohramming language
-;
-; This file is part of the Zephir Language Specifications.
-;
-; (c) Zephir Team <team@zephir-lang.com>
-;
-; For the full copyright and license information, please view
-; the LICENSE file that was distributed with this source code.
-;
-; Author: Serghei Iakovlev <serghei@phalconphp.com>
-; Maintainer: Serghei Iakovlev
-; Version: 0.0.1
-; URL: https://github.com/zephir-lang/zephir-langspec/blob/master/zephir.bnf
 
-zephir ::= top-statement-list
 
-top-statement-list ::= top-statement-list top-statement
-top-statement-list ::= top-statement
 
-top-statement ::= namespace-def
-top-statement ::= use-aliases
-top-statement ::= function-def
-top-statement ::= class-def
-top-statement ::= interface-def
-top-statement ::= comment
-top-statement ::= cblock
+                       <zephir> ::= <top statement list>
 
-namespace-def ::= "namespace" identifier ";"
-namespace-def ::= use-aliases-list ";"
+           <top statement list> ::= <top statement list> <top statement>
+           <top statement list> ::= <top statement>
 
-use-aliases-list ::= use-aliases-list "," use-aliases
-use-aliases-list ::= use-aliases
+                <top statement> ::= <namespace definition>
+                <top statement> ::= <use aliases>
+                <top statement> ::= <function definition>
+                <top statement> ::= <class definition>
+                <top statement> ::= <interface definition>
+                <top statement> ::= <comment>
+                <top statement> ::= <cblock>
 
-use-aliases ::= identifier
-use-aliases ::= identifier "as" identifier
+         <namespace definition> ::= namespace <identifier> ;
+         <namespace definition> ::= use <use aliases-list> ;
 
-function-def ::= "function" identifier "(" ")" "-" method-return-type "{" "}"
-function-def ::= "function" identifier "(" ")" "-" method-return-type ";"
-function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type "{" "}"
-function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type ";"
-function-def ::= "function" identifier "(" ")" "-" method-return-type "{" statement-list "}"
-function-def ::= "function" identifier "(" parameter-list ")" "-" method-return-type "{" statement-list "}"
-function-def ::= "function" identifier "(" ")" "{" "}"
-function-def ::= "function" identifier "(" ")" ";"
-function-def ::= "function" identifier "(" parameter-list ")" "{" "}"
-function-def ::= "function" identifier "(" parameter-list ")" ";"
-function-def ::= "function" identifier "(" ")" "{" statement-list "}"
-function-def ::= "function" identifier "(" parameter-list ")" "{" statement-list "}"
+             <use aliases list> ::= <use aliases list> , <use aliases>
+             <use aliases list> ::= <use aliases>
 
-interface-def ::= "interface" identifier interface-body
-interface-def ::= "interface" identifier "extends" implements-list interface-body
+                  <use aliases> ::= <identifier>
+                  <use aliases> ::= <identifier> as <identifier>
 
-class-def ::= "class" identifier class-body
-class-def ::= "class" identifier "extends" identifier class-body
-class-def ::= "class" identifier "implements" implements-list class-body
-class-def ::= "class" identifier "extends" identifier "implements" implements-list class-body
-class-def ::= "abstract" "class" identifier class-body
-class-def ::= "abstract" "class" identifier "extends" identifier class-body
-class-def ::= "abstract" "class" identifier "implements" implements-list class-body
-class-def ::= "abstract" "class" identifier "extends" identifier "implements" implements-list class-body
-class-def ::= "final" "class" identifier class-body
-class-def ::= "final" "class" identifier "extends" identifier class-body
-class-def ::= "final" "class" identifier "implements" implements-list class-body
-class-def ::= "final" "class" identifier "extends" identifier "implements" implements-list class-body
+          <function definition> ::= <function label> <identifier> ( ) -> method-return-type { }
+          <function definition> ::= <function label> <identifier> ( ) -> method-return-type ;
+          <function definition> ::= <function label> <identifier> ( parameter-list ) -> method-return-type { }
+          <function definition> ::= <function label> <identifier> ( parameter-list ) -> method-return-type ;
+          <function definition> ::= <function label> <identifier> ( ) -> method-return-type { statement-list }
+          <function definition> ::= <function label> <identifier> ( parameter-list ) -> method-return-type { statement-list }
+          <function definition> ::= <function label> <identifier> ( ) { }
+          <function definition> ::= <function label> <identifier> ( ) ;
+          <function definition> ::= <function label> <identifier> ( parameter-list ) { }
+          <function definition> ::= <function label> <identifier> ( parameter-list ) ;
+          <function definition> ::= <function label> <identifier> ( ) { statement-list }
+          <function definition> ::= <function label> <identifier> ( parameter-list ) { statement-list }
 
-class-body ::= "{" "}"
-class-body ::= "{" class-definition "}"
+               <function label> ::= function | fn
 
-implements-list ::= implements-list "," implements
-implements-list ::= implements
+         <interface definition> ::= interface <identifier> <interface body definition>
+         <interface definition> ::= interface <identifier> extends <implements list> <interface body definition>
 
-implements ::= identifier
+             <class definition> ::= <class scope> class <identifier> <class body definition>
+             <class definition> ::= <class scope> class <identifier> extends <identifier> <class body definition>
+             <class definition> ::= <class scope> class <identifier> implements <implements list> <class body definition>
+             <class definition> ::= <class scope> class <identifier> extends <identifier> implements <implements list> <class body definition>
 
-interface-body ::= "{" "}"
-interface-body ::= "{" interface-definition "}"
+                  <class scope> ::= abstract | final | internal | <empty>
 
-class-definition ::= class-properties-definition
-class-definition ::= class-consts-definition
-class-definition ::= class-methods-definition
-class-definition ::= class-methods-definition
-class-definition ::= class-properties-definition class-consts-definition
-class-definition ::= class-consts-definition class-properties-definition
-class-definition ::= class-consts-definition class-methods-definition
-class-definition ::= class-properties-definition class-consts-definition class-methods-definition
-class-definition ::= class-consts-definition class-properties-definition class-methods-definition
+                        <empty> ::=
 
-interface-definition ::= class-consts-definition
-interface-definition ::= interface-methods-definition
-interface-definition ::= class-consts-definition interface-methods-definition
+        <class body definition> ::= { }
+        <class body definition> ::= { <class body> }
 
-class-properties-definition ::= class-properties-definition class-property-definition
-class-properties-definition ::= class-property-definition
+              <implements list> ::= <implements list> , <implements>
+              <implements list> ::= <implements>
 
-class-property-definition ::= COMMENT(C) visibility-list identifier ";"
-class-property-definition ::= visibility-list identifier ";"
-class-property-definition ::= COMMENT(C) visibility-list identifier "=" literal-expr ";"
-class-property-definition ::= visibility-list identifier "=" literal-expr ";"
-class-property-definition ::= COMMENT(C) visibility-list identifier class-property-shortcuts ";"
-class-property-definition ::= visibility-list identifier class-property-shortcuts ";"
-class-property-definition ::= COMMENT(C) visibility-list identifier "=" literal-expr class-property-shortcuts ";"
-class-property-definition ::= visibility-list identifier "=" literal-expr class-property-shortcuts ";"
+                   <implements> ::= <identifier>
 
-class-property-shortcuts ::= "{" "}"
-class-property-shortcuts ::= "{" class-property-shortcuts-list "}"
+    <interface body definition> ::= { }
+    <interface body definition> ::= { <interface body> }
 
-class-property-shortcuts-list ::= class-property-shortcuts-list "," class-property-shortcut
-class-property-shortcuts-list ::= class-property-shortcut
+                   <class body> ::= <class properties definition>
+                   <class body> ::= <class consts definition>
+                   <class body> ::= <class methods definition>
+                   <class body> ::= <class methods definition>
+                   <class body> ::= <class properties definition> <class consts definition>
+                   <class body> ::= <class consts definition> <class properties definition>
+                   <class body> ::= <class consts definition> <class methods definition>
+                   <class body> ::= <class properties definition> <class consts definition> <class methods definition>
+                   <class body> ::= <class consts definition> <class properties definition> <class methods definition>
 
-class-property-shortcut ::= identifier
-class-property-shortcut ::= COMMENT(C) identifier
+               <interface body> ::= <class consts definition>
+               <interface body> ::= <interface methods definition>
+               <interface body> ::= <class consts definition> <interface methods definition>
+
+  <class properties definition> ::= <class properties definition> <class property definition>
+  <class properties definition> ::= <class property definition>
+
+    <class property definition> ::= <property comment> <visibility list> <identifier> ;
+    <class property definition> ::= <property comment> <visibility list> <identifier> = <literal expression> ;
+    <class property definition> ::= <property comment> <visibility list> <identifier> <class property shortcuts> ;
+    <class property definition> ::= <property comment> <visibility list> <identifier> = <literal expr> <class property shortcuts> ;
+
+             <property comment> ::= <comment> | <empty>
+
+     <class property shortcuts> ::= { }
+     <class property shortcuts> ::= { <class property shortcuts list> }
+
+<class property shortcuts list> ::= <class property shortcuts list> , <class property shortcut>
+<class property shortcuts list> ::= <class property shortcut>
+
+      <class property shortcut> ::= <property comment> <identifier>
 
 ; 409 constants definition
